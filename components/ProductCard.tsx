@@ -31,7 +31,7 @@ export default function ProductCard({
   return (
     <div 
       onClick={() => router.push(`/product/${id}`)}
-      className={`bg-[#f0f4f8] rounded-2xl md:rounded-[2rem] shadow-[4px_4px_8px_#d1d9e6,-4px_-4px_8px_#ffffff] md:shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff] overflow-hidden transition-all duration-300 group cursor-pointer flex flex-col relative ${isSold ? "opacity-75" : "hover:shadow-[12px_12px_24px_#d1d9e6,-12px_-12px_24px_#ffffff] md:hover:-translate-y-1"}`}
+      className={`bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden transition-all duration-300 group cursor-pointer flex flex-col relative ${isSold ? "opacity-75" : "hover:border-indigo-500 dark:hover:border-indigo-500 hover:-translate-y-1"}`}
     >
       {/* SOLD Overlay */}
       {isSold && (
@@ -42,8 +42,8 @@ export default function ProductCard({
         </div>
       )}
 
-      {/* Image Container - Reduced margin and height for mobile */}
-      <div className="aspect-square bg-[#e2e8f0] relative overflow-hidden m-1.5 md:m-2 rounded-xl md:rounded-[1.5rem]">
+      {/* Image Container - FIXED GLOW AND COVER */}
+      <div className="aspect-square bg-slate-100 dark:bg-slate-950 relative overflow-hidden m-1.5 md:m-2 rounded-xl md:rounded-[1.5rem]">
         
         {/* NEW Badge */}
         {isNew && !isSold && (
@@ -56,7 +56,7 @@ export default function ProductCard({
           <img 
             src={imageUrl} 
             alt={title} 
-            className={`object-cover w-full h-full ${!isSold && "group-hover:scale-105"} transition-transform duration-500`} 
+            className={`object-contain w-full h-full p-2 ${!isSold && "group-hover:scale-105"} transition-transform duration-500`} 
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-slate-400 dark:text-slate-600 text-sm">
@@ -65,10 +65,10 @@ export default function ProductCard({
         )}
       </div>
       
-      {/* Details Container - Reduced padding and font sizes for mobile */}
+      {/* Details Container */}
       <div className="px-3 pb-3 pt-1 md:px-4 md:pb-5 md:pt-2 flex flex-col flex-grow">
         
-        <h3 className="font-extrabold text-sm md:text-lg text-slate-900 truncate tracking-tight">
+        <h3 className="font-extrabold text-sm md:text-lg text-slate-900 dark:text-white truncate tracking-tight">
           {title}
         </h3>
         
@@ -77,7 +77,7 @@ export default function ProductCard({
         </p>
         
         <div className="mt-1.5 md:mt-3 flex flex-col gap-1 md:gap-2 mb-2 md:mb-4">
-          <div className="flex items-center gap-1 text-[10px] md:text-xs font-bold text-slate-500">
+          <div className="flex items-center gap-1 text-[10px] md:text-xs font-bold text-slate-500 dark:text-slate-400">
             <MapPin className="w-2.5 h-2.5 md:w-3 md:h-3" />
             <span className="truncate">{institution}</span>
           </div>
