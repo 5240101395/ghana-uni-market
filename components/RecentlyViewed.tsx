@@ -26,10 +26,10 @@ export default function RecentlyViewed() {
       <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide">
         {recentItems.map((item) => (
           <Link 
-            key={item.id} 
-            href={`/product/${item.id}`}
-            className="flex-shrink-0 w-40 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
-          >
+  key={item.id} 
+  href={`/product/${item.id}`}
+  className="flex-shrink-0 w-40 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:border-indigo-500 dark:hover:border-indigo-500 hover:-translate-y-1 transition-all duration-300 group"
+>
             <div className="aspect-square bg-slate-100 dark:bg-slate-900 relative overflow-hidden">
               {item.image_url ? (
                 <img 
