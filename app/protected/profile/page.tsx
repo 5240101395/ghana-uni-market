@@ -76,16 +76,7 @@ async function ProfileData() {
 
           {/* UPDATED WHATSAPP SECTION */}
           <div>
-            <p className="text-sm font-bold text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1">
-              <Phone className="w-4 h-4 text-indigo-500"/> WhatsApp Number
-            </p>
-            <div className="flex items-center gap-3">
-              <p className="font-semibold text-slate-900 dark:text-white">
-                {profile?.whatsapp_number || "Not set"}
-              </p>
-              <EditWhatsApp userId={user.id} currentNumber={profile?.whatsapp_number || ""} />
-            </div>
-          </div>
+
 
           <div>
             <p className="text-sm font-bold text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1"><BadgeCheck className="w-4 h-4 text-indigo-500"/> Verification Status</p>
