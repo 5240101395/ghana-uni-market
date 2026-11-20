@@ -17,7 +17,6 @@ export default function UploadPage() {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   
-  // Location state
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [gettingLocation, setGettingLocation] = useState(false);
@@ -26,12 +25,13 @@ export default function UploadPage() {
   const router = useRouter();
   const supabase = createClient();
 
-  // Check if user is a seller
-  useEffect(() => {
+    useEffect(() => {
     const checkRole = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+        
+        // If they are not a seller, kick them back to the profile
         if (profile?.role !== 'seller') {
           router.push("/protected/profile");
         }
@@ -157,32 +157,29 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#e8f0fe] py-12 transition-colors">
-      
-      {/* Background Decorative Blobs */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob"></div>
-      <div className="absolute top-[20%] right-[-10%] w-[30%] h-[30%] bg-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
-      <div className="absolute bottom-[-20%] left-[20%] w-[40%] h-[40%] bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
+    <div className="min-h-screen relative overflow-hidden bg-[#e8f0fe] dark:bg-slate-950 transition-colors">
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-300 dark:bg-blue-900/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 animate-blob"></div>
+      <div className="absolute top-[20%] right-[-10%] w-[30%] h-[30%] bg-indigo-300 dark:bg-indigo-900/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
+      <div className="absolute bottom-[-20%] left-[20%] w-[40%] h-[40%] bg-purple-300 dark:bg-purple-900/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
 
       <div className="relative z-10">
         <Navbar />
         <main className="max-w-2xl mx-auto px-4 mt-8">
           
-          <div className="bg-[#f0f4f8] p-8 sm:p-10 rounded-[2rem] shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff]">
-            <h1 className="text-3xl font-extrabold text-slate-900 mb-2 tracking-tight">Sell an Item</h1>
-            <p className="text-sm font-medium text-slate-500 uppercase tracking-widest mb-8">Post to the marketplace</p>
+          <div className="bg-[#f0f4f8] dark:bg-slate-900 p-8 sm:p-10 rounded-[2rem] shadow-[8px_8px_16px_#d1d9e6,-8px_-8px_16px_#ffffff] dark:shadow-[8px_8px_16px_#020617,-8px_-8px_16px_#1e293b] transition-colors">
+            <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-2 tracking-tight">Sell an Item</h1>
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-8">Post to the marketplace</p>
             
             <form onSubmit={handleUpload} className="space-y-6">
               
-              {/* Image Upload Area */}
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-3">
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">
                   Product Images (Max 5)
                 </label>
                 
                 <div className="grid grid-cols-3 gap-4 mb-3">
                   {imagePreviews.map((preview, index) => (
-                    <div key={index} className="relative aspect-square rounded-2xl overflow-hidden shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff]">
+                    <div key={index} className="relative aspect-square rounded-2xl overflow-hidden shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] dark:shadow-[inset_2px_2px_5px_#020617,inset_-2px_-2px_5px_#1e293b]">
                       <img src={preview} alt="Preview" className="w-full h-full object-cover" />
                       <button 
                         type="button" 
@@ -195,29 +192,28 @@ export default function UploadPage() {
                   ))}
                   
                   {imageFiles.length < 5 && (
-                    <label className="flex flex-col items-center justify-center aspect-square rounded-2xl cursor-pointer bg-[#f0f4f8] shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] hover:bg-[#e2e8f0] transition-all border-2 border-dashed border-slate-300">
-                      <ImagePlus className="w-8 h-8 text-slate-400 mb-2" />
-                      <span className="text-xs font-bold text-slate-500">Add Photo</span>
+                    <label className="flex flex-col items-center justify-center aspect-square rounded-2xl cursor-pointer bg-[#f0f4f8] dark:bg-slate-800 shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] dark:shadow-[inset_2px_2px_5px_#020617,inset_-2px_-2px_5px_#1e293b] hover:bg-[#e2e8f0] dark:hover:bg-slate-700 transition-all border-2 border-dashed border-slate-300 dark:border-slate-600">
+                      <ImagePlus className="w-8 h-8 text-slate-400 dark:text-slate-500 mb-2" />
+                      <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Add Photo</span>
                       <input type="file" multiple accept="image/*" onChange={handleImageChange} className="sr-only" />
                     </label>
                   )}
                 </div>
               </div>
 
-              {/* Inputs */}
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Item Title</label>
-                <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-5 py-3.5 bg-[#f0f4f8] rounded-xl border border-white/50 text-slate-900 outline-none shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder:text-slate-400" placeholder="e.g. HP Laptop (Used)" />
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Item Title</label>
+                <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-5 py-3.5 bg-[#f0f4f8] dark:bg-slate-800 rounded-xl border border-white/50 dark:border-slate-700 text-slate-900 dark:text-white outline-none shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] dark:shadow-[inset_2px_2px_5px_#020617,inset_-2px_-2px_5px_#1e293b] focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500" placeholder="e.g. HP Laptop (Used)" />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Price (GH₵)</label>
-                <input type="number" required step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} className="w-full px-5 py-3.5 bg-[#f0f4f8] rounded-xl border border-white/50 text-slate-900 outline-none shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder:text-slate-400" placeholder="e.g. 2500" />
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Price (GH₵)</label>
+                <input type="number" required step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} className="w-full px-5 py-3.5 bg-[#f0f4f8] dark:bg-slate-800 rounded-xl border border-white/50 dark:border-slate-700 text-slate-900 dark:text-white outline-none shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] dark:shadow-[inset_2px_2px_5px_#020617,inset_-2px_-2px_5px_#1e293b] focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500" placeholder="e.g. 2500" />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Category</label>
-                <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full px-5 py-3.5 bg-[#f0f4f8] rounded-xl border border-white/50 text-slate-900 outline-none shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] focus:ring-2 focus:ring-indigo-500/20 transition-all">
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Category</label>
+                <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full px-5 py-3.5 bg-[#f0f4f8] dark:bg-slate-800 rounded-xl border border-white/50 dark:border-slate-700 text-slate-900 dark:text-white outline-none shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] dark:shadow-[inset_2px_2px_5px_#020617,inset_-2px_-2px_5px_#1e293b] focus:ring-2 focus:ring-indigo-500/20 transition-all">
                   <option value="Books">Books & Stationery</option>
                   <option value="Electronics">Electronics</option>
                   <option value="Fashion">Fashion & Clothing</option>
@@ -227,26 +223,24 @@ export default function UploadPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Description</label>
-                <textarea required rows={4} value={description} onChange={(e) => setDescription(e.target.value)} className="w-full px-5 py-3.5 bg-[#f0f4f8] rounded-xl border border-white/50 text-slate-900 outline-none shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder:text-slate-400" placeholder="Describe the condition of the item..." />
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Description</label>
+                <textarea required rows={4} value={description} onChange={(e) => setDescription(e.target.value)} className="w-full px-5 py-3.5 bg-[#f0f4f8] dark:bg-slate-800 rounded-xl border border-white/50 dark:border-slate-700 text-slate-900 dark:text-white outline-none shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] dark:shadow-[inset_2px_2px_5px_#020617,inset_-2px_-2px_5px_#1e293b] focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500" placeholder="Describe the condition of the item..." />
               </div>
 
-              {/* Location Button */}
-              <div className="pt-6 border-t border-white/60">
-                <label className="block text-sm font-bold text-slate-700 mb-2">Meeting Location (Optional)</label>
+              <div className="pt-6 border-t border-white/60 dark:border-slate-700">
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Meeting Location (Optional)</label>
                 <button
                   type="button"
                   onClick={handleGetLocation}
                   disabled={gettingLocation}
-                  className="flex items-center justify-center gap-2 px-6 py-3.5 bg-[#f0f4f8] text-slate-700 rounded-xl font-bold shadow-[4px_4px_8px_#d1d9e6,-4px_-4px_8px_#ffffff] hover:shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] transition-all w-full"
+                  className="flex items-center justify-center gap-2 px-6 py-3.5 bg-[#f0f4f8] dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-bold shadow-[4px_4px_8px_#d1d9e6,-4px_-4px_8px_#ffffff] dark:shadow-[4px_4px_8px_#020617,-4px_-4px_8px_#1e293b] hover:shadow-[inset_2px_2px_5px_#d1d9e6,inset_-2px_-2px_5px_#ffffff] dark:hover:shadow-[inset_2px_2px_5px_#020617,inset_-2px_-2px_5px_#1e293b] transition-all w-full"
                 >
                   <MapPin className="w-5 h-5 text-indigo-500" />
                   {gettingLocation ? "Getting location..." : latitude ? "Location Set ✅" : "Tag My Current Location"}
                 </button>
-                <p className="text-xs font-medium text-slate-500 mt-3 text-center">Use this to let buyers know exactly where to meet you on campus.</p>
+                <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-3 text-center">Use this to let buyers know exactly where to meet you on campus.</p>
               </div>
 
-              {/* Submit Button */}
               <button 
                 type="submit" 
                 disabled={loading} 
