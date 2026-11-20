@@ -33,7 +33,9 @@ export default function Navbar() {
   }, [supabase]);
 
   return (
-    <nav className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border-b border-white/40 dark:border-slate-700/50 sticky top-0 z-50 transition-colors shadow-sm">
+    <nav className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 transition-colors shadow-sm">
+      
+      {/* ADDED THE MISSING WRAPPER DIV HERE */}
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between relative">
         
         {/* Logo */}
@@ -47,12 +49,12 @@ export default function Navbar() {
 
         {/* DESKTOP MENU */}
         <div className="hidden md:flex items-center gap-2 sm:gap-3">
-          <Link href="/protected/my-listings" className="flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors px-2 py-2">
+          <Link href="/protected/my-listings" className="flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors px-2 py-2">
             <List className="w-4 h-4" />
             <span>My Listings</span>
           </Link>
 
-          <Link href="/protected/inbox" className="relative flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors px-2 py-2">
+          <Link href="/protected/inbox" className="relative flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors px-2 py-2">
             <div className="relative">
               <MessageSquare className="w-4 h-4" />
               {unreadCount > 0 && (
@@ -71,11 +73,11 @@ export default function Navbar() {
           
           <ThemeToggle />
           
-          <Link href="/protected/profile" className="flex items-center justify-center w-9 h-9 rounded-full overflow-hidden border-2 border-white/50 shadow-sm hover:border-indigo-500 transition-all ml-2">
+          <Link href="/protected/profile" className="flex items-center justify-center w-9 h-9 rounded-full overflow-hidden border-2 border-white/50 dark:border-slate-700 shadow-sm hover:border-indigo-500 transition-all ml-2">
             {avatarUrl ? (
               <img src={avatarUrl} alt="Profile" className="w-full h-full object-cover" />
             ) : (
-              <UserCircle className="w-7 h-7 text-slate-500" />
+              <UserCircle className="w-7 h-7 text-slate-500 dark:text-slate-400" />
             )}
           </Link>
           
@@ -84,17 +86,17 @@ export default function Navbar() {
 
         {/* MOBILE MENU BUTTONS */}
         <div className="flex md:hidden items-center gap-3">
-          <Link href="/protected/profile" className="flex items-center justify-center w-9 h-9 rounded-full overflow-hidden border-2 border-white/50 shadow-sm hover:border-indigo-500 transition-all">
+          <Link href="/protected/profile" className="flex items-center justify-center w-9 h-9 rounded-full overflow-hidden border-2 border-white/50 dark:border-slate-700 shadow-sm hover:border-indigo-500 transition-all">
             {avatarUrl ? (
               <img src={avatarUrl} alt="Profile" className="w-full h-full object-cover" />
             ) : (
-              <UserCircle className="w-6 h-6 text-slate-500" />
+              <UserCircle className="w-6 h-6 text-slate-500 dark:text-slate-400" />
             )}
           </Link>
           
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-            className="text-slate-600 hover:text-indigo-600 p-1"
+            className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 p-1"
           >
             {isMobileMenuOpen ? <X className="w-7 h-7" /> : <MoreVertical className="w-7 h-7" />}
           </button>
@@ -114,7 +116,7 @@ export default function Navbar() {
                 </span>
               )}
             </Link>
-            <Link href="/protected/upload" className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800 text-indigo-600 font-bold" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link href="/protected/upload" className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800 text-indigo-600 dark:text-indigo-400 font-bold" onClick={() => setIsMobileMenuOpen(false)}>
               <PlusCircle className="w-5 h-5" /> Sell Item
             </Link>
             <div className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800">
