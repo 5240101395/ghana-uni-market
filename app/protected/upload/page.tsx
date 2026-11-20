@@ -25,11 +25,13 @@ export default function UploadPage() {
   const router = useRouter();
   const supabase = createClient();
 
-  useEffect(() => {
+    useEffect(() => {
     const checkRole = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+        
+        // If they are not a seller, kick them back to the profile
         if (profile?.role !== 'seller') {
           router.push("/protected/profile");
         }
