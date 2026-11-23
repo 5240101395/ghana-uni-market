@@ -3,36 +3,57 @@
 import { useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-export default function TrackProfileView({ viewedId }: { viewedId: string }) {
-  const supabase = createClient();
-
+export default function TrackProfileView({ 
+  profileId, 
+  currentUserId 
+}: { 
+  profileId: string, 
+  currentUserId: string 
+}) {
   useEffect(() => {
     const logView = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user || user.id === viewedId) return;
+      // 1. Strict check: Make sure BOTH are actual strings and not empty
+      if (
+        typeof profileId !== 'string' || 
+        profileId.trim() === '' || 
+        typeof currentUserId !== 'string' || 
+        currentUserId.trim() === ''
+      ) {
+        return; 
+      }
 
-      // First, remove any old view from this user so we don't get a duplicate error
-      await supabase
-        .from("profile_views")
-        .delete()
-        .eq("viewer_id", user.id)
-        .eq("viewed_id", viewedId);
+      // 2. Don't log a view if the user is looking at their own profile
+      if (profileId === currentUserId) return;
 
-      // Then insert a fresh view
+      const supabase = createClient();
+
+      // 3. Use "upsert" (Insert or Update). 
+      // If the user already viewed this profile, it just updates the date.
       const { error } = await supabase
         .from("profile_views")
-        .insert({ viewer_id: user.id, viewed_id: viewedId });
+        .upsert(
+          { 
+            viewer_id: currentUserId, 
+            viewed_id: profileId,
+            created_at: new Date().toISOString()
+          },
+          { 
+            onConflict: 'viewer_id,viewed_id' // Tell it which columns to check for duplicates
+          }
+        );
 
       if (error) {
         console.error("Error logging view:", error.message);
-      } else {
-        console.log("Profile view logged successfully!");
       }
     };
 
-    logView();
-  }, [viewedId, supabase]);
+    // Wait 1 second before trying, to let the page fully load
+    const timer = setTimeout(() => {
+      logView();
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [profileId, currentUserId]);
 
   return null;
 }

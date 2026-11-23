@@ -1,4 +1,4 @@
-import { MapPin, ShieldAlert, Navigation } from "lucide-react";
+import { MapPin, ShieldAlert, Navigation, ChevronRight } from "lucide-react";
 import MapWrapper from "@/components/MapWrapper";
 import ProductChat from "@/components/ProductChat";
 import TrackProductView from "@/components/TrackProductView";
@@ -68,12 +68,21 @@ async function ProductData({ id, chatWith }: { id: string, chatWith?: string }) 
           <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-2">GH₵ {product.price.toFixed(2)}</p>
           
           <div className="mt-4 flex flex-col gap-2 border-b border-slate-200 dark:border-slate-700 pb-4">
+            {/* UPDATED SELLER LINK - Made into a big clickable card */}
             <Link 
               href={`/seller/${product.seller_id}`}
-              className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline font-medium transition-colors"
+              className="flex items-center justify-between w-full p-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all group"
             >
-              <MapPin className="w-4 h-4" />
-              <span>Visit {seller?.full_name || "Seller"}'s Profile ({seller?.institution || "Unknown"})</span>
+              <div className="flex items-center gap-3 text-blue-600 dark:text-blue-400 font-bold">
+                <div className="bg-blue-100 dark:bg-blue-900/50 p-2 rounded-full">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-slate-900 dark:text-white">{seller?.full_name || "Seller"}'s Profile</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{seller?.institution || "Unknown"}</p>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
             </Link>
             {seller?.is_verified && <VerifiedBadge />}
           </div>

@@ -1,30 +1,54 @@
 "use client";
 
 import { useEffect } from "react";
+import { createClient } from "@/lib/supabase/client";
 
-export default function TrackProductView({ product }: { product: any }) {
+export default function TrackProfileView({ 
+  profileId, 
+  currentUserId 
+}: { 
+  profileId: string, 
+  currentUserId: string 
+}) {
   useEffect(() => {
-    // Get existing items
-    const saved = localStorage.getItem("recentlyViewed");
-    let items = saved ? JSON.parse(saved) : [];
+    const logView = async () => {
+      // 1. If either ID is missing, do nothing.
+      if (!profileId || !currentUserId) return;
 
-    // Remove the item if it's already there (so we can move it to the top)
-    items = items.filter((item: any) => item.id !== product.id);
+      // 2. Don't log a view if the user is looking at their own profile
+      if (profileId === currentUserId) return;
 
-    // Add the new item to the beginning of the list
-    items.unshift({
-      id: product.id,
-      title: product.title,
-      price: product.price,
-      image_url: product.image_url,
-    });
+      const supabase = createClient();
 
-    // Keep only the last 5 items
-    items = items.slice(0, 5);
+      // 3. Check if a view already exists
+      const { data: existingView } = await supabase
+        .from("profile_views")
+        .select("*")
+        .eq("viewer_id", currentUserId)
+        .eq("viewed_id", profileId)
+        .single();
 
-    // Save back to local storage
-    localStorage.setItem("recentlyViewed", JSON.stringify(items));
-  }, [product]);
+      if (existingView) {
+        // Update timestamp so they move to the top of the list
+        await supabase
+          .from("profile_views")
+          .update({ created_at: new Date().toISOString() })
+          .eq("id", existingView.id);
+      } else {
+        // Insert a new row
+        const { error } = await supabase.from("profile_views").insert({
+          viewer_id: currentUserId,
+          viewed_id: profileId,
+        });
 
-  return null; // This component doesn't render anything visible
+        if (error) {
+          console.error("Error logging view:", error.message);
+        }
+      }
+    };
+
+    logView();
+  }, [profileId, currentUserId]);
+
+  return null;
 }
